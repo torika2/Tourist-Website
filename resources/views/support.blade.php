@@ -81,13 +81,24 @@
                     @if (\Auth::user()->id == $chats->userId)
                         <div style="background-color: darkblue;color:white;">
                             <p style="margin-top:0%;">{{$chats->content}}</p>
-                            <div style="float:right;margin-top:-6.05%;margin-right:1%;border-radius: 5px;width: 5px;height: 5px;background:white;"></div>
+                            @if ($chats->seen == 0)
+                                <div style="float:left;margin-top:-6.05%;margin-left:98%;;border-radius: 5px;width: 5px;height: 5px;background:none;border:solid 0.5px white;"></div> 
+                                {{-- Unseen --}}
+                            @else
+                                <div style="float:right;margin-top:-6.05%;margin-right:1%;border-radius: 5px;width: 5px;height: 5px;background:white;"></div>
+                               {{-- Seen --}}
+                            @endif  
                         </div>
                     @else
                         <div style="background-color:darkred;color:white;">
                             <p style="margin-top:0%;margin-left: 75%;">{{$chats->content}}</p>
-                            <div style="float:left;margin-top:-6.05%;margin-left:1%;;border-radius: 5px;width: 5px;height: 5px;background:none;border:solid 0.5px white;"></div>
-                        </div>
+                             @if ($chats->seen == 0)
+                                <div style="float:left;margin-top:-6.05%;margin-left:1%;;border-radius: 5px;width: 5px;height: 5px;background:none;border:solid 0.5px white;"></div>
+                                {{-- Unseen --}}
+                            @else
+                                <div style="float:right;margin-top:-6.05%;margin-right:1%;border-radius: 5px;width: 5px;height: 5px;background:white;"></div>
+                                {{-- Seen --}}
+                            @endif
                     @endif
                 @endif
                 @endforeach
@@ -98,10 +109,12 @@
             <div class="chatInput">
                 <form action="{{ route('supp') }}" method="POST">
                         @csrf
-                    <input class="chatTextInput" type="text" name="inputChatText">
-                    <input type="hidden" name="userId" value="{{\Auth::user()->id}}">
-                    <button class="sendButton"><b>Send</b></button>
+                    <input class="chatTextInput" type="text" name="inputChatText" />
+                    <input type="hidden" name="userId" value="{{\Auth::user()->id}}" />
+                    <button class="sendButton" name="chatSendButton"><b>Send</b></button>
+                    <input type="hidden" name="seen" value="1" />
                 </form>
+
             </div>    
         </div>
         <div>

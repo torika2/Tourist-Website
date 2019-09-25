@@ -9,6 +9,10 @@ use Input;
 
 class pageController extends Controller
 {
+    public function emptyLogin()
+    {
+        return \Redirect::to('/Login');
+    }
 	public function welcome()
 	{
 		return view('welcome');
@@ -19,7 +23,7 @@ class pageController extends Controller
             $chat = Supportchat::all();
             return view('support',compact('chat'));
         }else{
-            return Redirect::to('/Login');
+            return \Redirect::to('/Login');
         }
     }
     public function loginPage(Request $request)
@@ -32,18 +36,23 @@ class pageController extends Controller
     }
     public function supportChat(Request $request)
     {
-    	$this->validate($request,[
-    		'inputChatText' => 'required',
-    		'userId'        => 'required'
-    	]);
+        if (Auth::user()) {
+        	$this->validate($request,[
+        		'inputChatText' => 'required',
+        		'userId'        => 'required',
+        	]);
+        	$chat = new Supportchat;
 
-    	$chat = new App\Supportchat;
+        	$chat->content = $request->input('inputChatText');
+        	$chat->userId  = $request->input('userId');
+            if (!empty(request('seen'))) {
+                $chat->seen = $request->input('seen');
+            }
+        	$chat->save();
 
-    	$chat->content = $request->input('inputChatText');
-    	$chat->userId  = $request->input('userId');
-
-    	$chat->save();
-
-    	return back();
+        	return back();
+        }else{
+            return back();
+        }
     }
 }
