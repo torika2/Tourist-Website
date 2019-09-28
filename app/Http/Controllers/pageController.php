@@ -28,7 +28,7 @@ class pageController extends Controller
     }
     public function loginPage(Request $request)
     {
-    	return view('login');
+    	return view('Login');
     }
     public function registration()
     {

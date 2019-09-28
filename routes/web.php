@@ -18,4 +18,6 @@ Route::get('/Support','pageController@welcomePage');
 Route::get('/Login','pageController@loginPage');
 Route::get('/Registration','pageController@registration');
 Route::post('/Support','pageController@supportChat')->name('supp');
-
+Route::post('/supportChat','adminController@chatForSupport')->name('supportisation');
+Route::get('/adminSupport','adminController@supportChat');
+Route::post('/adminChat','adminController@userChat')->name('userChat');
