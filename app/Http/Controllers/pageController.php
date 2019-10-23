@@ -20,8 +20,9 @@ class pageController extends Controller
     public function welcomePage()
     {
         if (Auth::user()) {
-            $chat = Supportchat::all();
-            return view('support',compact('chat'));
+            // $chat = Supportchat::all();
+            // return view('support',compact('chat'));
+            return \Redirect::to('/adminSupport');
         }else{
             return \Redirect::to('/Login');
         }

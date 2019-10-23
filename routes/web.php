@@ -21,3 +21,4 @@ Route::post('/Support','pageController@supportChat')->name('supp');
 Route::post('/supportChat','adminController@chatForSupport')->name('supportisation');
 Route::get('/adminSupport','adminController@supportChat');
 Route::post('/adminChat','adminController@userChat')->name('userChat');
+Route::post('/adminCommDelete','adminController@dltComm')->name('deleteComm');

@@ -73,6 +73,6 @@
     </div>
 </div>
                     <div style="margin-left: 40%;margin-top: 5%;">
-                      <a href="/Registration">Do you want account? Register here!</a>
+                      <a href="./Registration">Do you want account? Register here!</a>
                     </div>
 @endsection

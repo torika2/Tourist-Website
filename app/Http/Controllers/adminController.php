@@ -9,6 +9,16 @@ use App\Supportchat;
 use Input;
 class adminController extends Controller
 {
+	public function dltComm(Request $request)
+	{
+		$this->validate($request,[
+			'msgId' => 'required'
+		]);
+		$msgId = $request->input('msgId');
+		Supportchat::where('id',$msgId)->delete();
+
+		return redirect()->route('supp');
+	}
 	public function supportChat()
 	{
 		if (Auth::user()->admin == 1) {
@@ -45,15 +55,14 @@ class adminController extends Controller
 		if (Auth::user()->admin == 1) {
 			if (!empty(request('userId'))) {
 				$this->validate($request,[
-					'userId' => 'required',
+					'userId' => 'required'
 				]);
 
 				$uId = $request->input('userId');
-					$chatTable = User::where('id',$uId)->get();
-
+					$chatWith = User::where('id',$uId)->get();
 				$user = User::all();
 				$chat = Supportchat::all();
-				return view('supportChat',compact('chatTable'))->with('user',$user)->with('chat',$chat);
+				return view('supportChat',compact('chatWith'))->with('user',$user)->with('chat',$chat);
 			}else{
 				return back();
 				exit();

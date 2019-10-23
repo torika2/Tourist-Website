@@ -75,6 +75,6 @@
     </div>
 </div>
                    <div style="margin-left: 40%;margin-top: 5%;">
-                      <a href="/Login">Do you have account already ? Login here!</a>
+                      <a href="./Login">Do you have account already ? Login here!</a>
                     </div>
 @endsection

@@ -72,16 +72,22 @@
             <a href="" style="text-decoration: underline gold;color:black;font-size:20px;">
                 <b><i>{{'Support '.\Auth::user()->name}}</i></b></a>
         </div>
-@foreach ($chatTable as $chatTables)
+@foreach ($chatWith as $chatWiths)
 	<div class="chatDiv">
             <div style="height: 7px;"></div>
             <div class="chatOutput" >
             @foreach ($chat as $chats)
-                @if (\Auth::user()->id == $chats->userId)
-                    <div style="margin-left:3%;border-radius: 5px;width: 5px;height: 5px;background:none;border:solid 0.5px white;">{{\Auth::user()->name.':'.$chats->content}}</div> 
-                @endif
-                @if ($chats->oponentId == $chatTables->id)
-                    <div style="float:right;margin-top:6.05%;margin-right:20%;border-radius: 5px;width: 5px;height: 5px;background:white;text-align: center;">Filipe:DSA</div>
+                @if (\Auth::user()->id == $chats->userId && $chatWiths->id == $chats->oponentId)
+                    <div id="outPut" style="border-radius: 5px;width: 100%;background:none;border:solid 0.5px white;">{{\Auth::user()->name.':'.$chats->content}}
+                    <form style="float: right;" method="POST" action="{{ route('deleteComm') }}">
+                        @csrf
+                        <input type="hidden" name="msgId" value="{{$chats->id}}">
+                        <button style="color:red;">X</button>
+                    </form>
+                </div>                         
+                @endif 
+                @if ($chats->userId == $chatWiths->id && \Auth::user()->id == $chats->oponentId)
+                    <div id="outPut" style="border-radius: 5px;width: 100%;background:blue;color:white;text-align: right;">{{$chatWiths->name.' : '.$chats->content}}</div>
                 @endif
             @endforeach
             </div>
@@ -99,16 +105,19 @@
                 </ul>
             </div>
             <div class="chatInput">
-                <form action="{{route('supportisation')}}" method="POST">
+                <form id="chatForm" action="{{route('supportisation')}}" method="POST">
                         @csrf
-                    <input class="chatTextInput" type="text"placeholder="{{'Send Message To -'.$chatTables->name}}" name="inputChatText" />
-                    <input type="hidden" name="oponentId" value="{{$chatTables->id}}">
-                    <button class="sendButton" name="chatSendButton"><b>Send</b></button>
-                    <input type="hidden" name="seen" value="1" />
+                    <input id="seen" class="chatTextInput" type="text"placeholder="{{'Send Message To -'.$chatWiths->name}}" name="inputChatText" />
+                    <input type="hidden" name="oponentId" value="{{$chatWiths->id}}">
+                    <button id="supportChat" class="sendButton" name="chatSendButton"><b>Send</b></button>
+                    <input id="seen" name="seen" type="hidden" value="1"/>
                 </form>
             </div>    
         </div>
         @endforeach
+<script type="text/javascript">
+    
+</script>
         {{-- LOGOUT :::::::::::::: --}}
         <div>
             <form method="POST" action="{{ route('logout') }}">
@@ -116,6 +125,7 @@
                 <button class="registerbtn">Logout</button>
             </form>
         </div>
+<script type="text/javascript" src="{{ asset('js/ajax.min.js') }}"></script>
 
 </body>
 </html>
