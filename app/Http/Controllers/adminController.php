@@ -11,13 +11,15 @@ class adminController extends Controller
 {
 	public function dltComm(Request $request)
 	{
+		
 		$this->validate($request,[
 			'msgId' => 'required'
 		]);
 		$msgId = $request->input('msgId');
-		Supportchat::where('id',$msgId)->delete();
-
-		return redirect()->route('supp');
+		
+		$a = Supportchat::where('id',$msgId)->delete();
+		
+		return response()->json($a);
 	}
 	public function supportChat()
 	{
@@ -52,6 +54,8 @@ class adminController extends Controller
 	}
 	public function userChat(Request $request)
 	{
+		// es middlewareti gaaketexolme shemdegshi
+
 		if (Auth::user()->admin == 1) {
 			if (!empty(request('userId'))) {
 				$this->validate($request,[
