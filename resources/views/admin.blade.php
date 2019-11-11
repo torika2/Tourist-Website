@@ -1,11 +1,7 @@
 @extends('lay')
 
 @section('main')
-        <div class="chatDiv">
-            <div style="height: 7px;"></div>
-            <div class="chatOutput" >
-                {{-- OUT PUT --}}
-                    <p style="color: yellow;text-align: center"><b><i>Select One Of Them !!</i></b></p>
+                    <p style="color: yellow;text-align: center;margin-top: 0%;"><b><i>Select One Of Them !!</i></b></p>
             </div>
             <div style="float: right;margin-top: -85%;">
                 <ul>
@@ -32,15 +28,4 @@
                     <input class="chatTextInput"  type="text" disabled/>
                     <button class="sendButton" disabled><b>Send</b></button>
                 </form>
-            </div>    
-        </div>
-        
-        {{-- CHAT ::::::::::::::::::::::::: --}}
-        <div>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button class="registerbtn">Logout</button>
-            </form>
-        </div>
-
 @endsection

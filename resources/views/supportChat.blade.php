@@ -3,9 +3,6 @@
 @section('main')
 
 @foreach ($chatWith as $chatWiths)
-    <div class="chatDiv">
-            <div style="height: 7px;"></div>
-            <div class="chatOutput" >
             @foreach ($chat as $chats)
                 @if (\Auth::user()->id == $chats->userId && $chatWiths->id == $chats->oponentId)
                     <div id="{{$chats->id}}" style="border:none;background:none;">{{\Auth::user()->name.':'.$chats->content}}
@@ -48,15 +45,12 @@
                     <input id="oponentId" name="opId" type="hidden" value="{{$chatWiths->id}}" />
                     <button id="chatAccept" class="sendButton" name="chatSendButton"><b>Send</b></button>
                 {{-- </form> --}}
-            </div>    
-        </div>
         @endforeach
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script type="text/javascript">
     // ========
 $(document).ready(function(){
     $("#content").click(function(){
-            var oponentId = $('#oponentId').val();
             $.ajaxSetup({
                 headers: {
                     'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
@@ -67,7 +61,7 @@ $(document).ready(function(){
                 dataType : "json",
                 url: "{{ route('seenMsg') }}", 
                 data: {
-                    oponentId: $('').val()
+                    oponentId: $('#oponentId').val()
                 },
             }).done( function(){ 
                 console.log('Ajax Successful');
@@ -77,7 +71,6 @@ $(document).ready(function(){
         });
     });
 
-    // ========
 $(document).ready(function(id){
     $("#chatAccept").click(function(id){
             var content = $('#anotherInp').val();
@@ -123,12 +116,5 @@ function deleteData(id){
 }
 
 </script>
-        {{-- LOGOUT :::::::::::::: --}}
-        <div>
-            <form method="POST" action="{{ route('logout') }}">
-                @csrf
-                <button class="registerbtn">Logout</button>
-            </form>
-        </div>
 @endsection
 

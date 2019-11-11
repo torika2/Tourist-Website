@@ -4,8 +4,8 @@
 <div class="container">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Login') }}</div>
+            <div class="card" style="background: #40444b;color: white;">
+                <div class="card-header" style="background: #40444b">{{ __('Login') }}</div>
 
                   <div class="card-body">
                     <form method="POST" action="{{ route('login') }}">
@@ -73,6 +73,6 @@
     </div>
 </div>
                     <div style="margin-left: 40%;margin-top: 5%;">
-                      <a href="./Registration">Do you want account? Register here!</a>
+                      <a href="./Registration" style="color:white;">Do you want account? Register here!</a>
                     </div>
 @endsection

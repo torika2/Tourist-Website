@@ -13,9 +13,9 @@
 
 Auth::routes();
 
-Route::get('/','pageController@welcome');
+
 Route::get('/Support','pageController@welcomePage');
-Route::get('/Login','pageController@loginPage');
+Route::get('/','pageController@loginPage');
 Route::get('/Registration','pageController@registration');
 Route::post('/Support','pageController@supportChat');
 Route::post('/supportChat','adminController@chatForSupport')->name('supp');

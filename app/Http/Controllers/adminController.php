@@ -60,10 +60,10 @@ class adminController extends Controller
 	{
 		if (!empty(request('userId'))) {
 
+
 			$this->validate($request,[
 				'userId' => 'required'
 			]);
-
 			$uId = $request->input('userId');
 			$chatWith = User::where('id',$uId)->get();
 			$user = User::all();
