@@ -1,0 +1,87 @@
+.chatDiv{
+    width: 500px;
+    height: 500px;
+    border-radius: 2px;
+    background:#202225;
+    margin:auto;
+}
+.chatOutput{
+    font-family: sans-serif;
+    width: 76.4%;
+    height: 85%;
+    background:#40444b;
+    margin-left: 2.5%;
+    margin-top: 5px;
+    color:white;
+    max-width: 76.4%;
+}
+.chatInput{
+    width: 95%;
+    margin:auto;
+    height: 50px;
+    background:#2f3136;
+    border-radius:2px;
+}
+.chatTextInput{
+    width: 79%;
+    margin-left: 4px;
+    height:35px;
+    margin-top: 5px;
+    background:#40444b;
+    color: white;
+    border:none;
+}
+.chatTextInput:hover{
+    background: grey;
+
+}
+.sendButton{
+    color:white;
+    background: #3a3d42;
+    border:none;
+    border-radius: 2px;
+    width: 17.5%;
+    height: 39px;
+}
+.sendButton:hover{
+    background: grey;
+}
+.registerbtn {
+  background-color: darkred;
+  color: white;
+  height: 50px;
+  margin-left:31.4%;
+  border: none;
+  cursor: pointer;
+  width: 37.2%;
+  opacity: 0.9;
+  border-radius: 2px;
+}
+
+.registerbtn:hover {
+  opacity: 1;
+}
+li{
+    list-style: none;
+    text-align: center;
+}
+.chooseChatWith{
+    border-radius: 2px;
+    width: 95px;
+    margin-right:6px;
+    height: 30px;
+    background: #3a3d42;
+    color: white;border:none;
+}
+.chooseChatWith:hover{
+    background: grey;
+}
+.deleteButton{
+    color:white;
+    border: none;
+    background: #2f3136;
+}
+.deleteButton:hover{
+    background: #3a3d42;
+    color:red;
+}

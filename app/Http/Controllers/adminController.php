@@ -9,6 +9,9 @@ use App\Supportchat;
 use Input;
 class adminController extends Controller
 {
+	public function __construct(){
+		$this->middleware('auth');
+	}
 	public function dltComm(Request $request)
 	{
 		
@@ -23,18 +26,12 @@ class adminController extends Controller
 	}
 	public function supportChat()
 	{
-		if (Auth::user()->admin == 1) {
 			$user = User::all();
 			$chat = Supportchat::all();
 			return view('admin')->with('user',$user)->with('chat',$chat);
-		}else{
-			return back();
-			exit();
-		}
 	}
 	public function chatForSupport(Request $request)
 	{
-		if (Auth::user()) {
 			$this->validate($request, [
 				'oponentId' => 'required',
 				'inputChatText'=>'required'
@@ -45,35 +42,37 @@ class adminController extends Controller
 			$users->oponentId = $request->input('oponentId');
 			$users->content = $request->input('inputChatText');
 			$users->save();
+			return response()->json($users);
+	}
+	public function Seen(Request $request)
+	{
+		$this->validate($request,[
+			'opId' => 'required'
+		]);
+		$myId = \Auth::user()->id;
+		$oponentId = $request->input('opId');
 
-			return \Redirect::to('/adminSupport');
-		}else{
-			return back();
-			exit();
-		}
+		$post = Supportchat::where('oponentId',$myId)->where('userId',$oponentId)->update(['seen' => 1]);
+
+		return response()->json($post);
 	}
 	public function userChat(Request $request)
 	{
-		// es middlewareti gaaketexolme shemdegshi
+		if (!empty(request('userId'))) {
 
-		if (Auth::user()->admin == 1) {
-			if (!empty(request('userId'))) {
-				$this->validate($request,[
-					'userId' => 'required'
-				]);
+			$this->validate($request,[
+				'userId' => 'required'
+			]);
 
-				$uId = $request->input('userId');
-					$chatWith = User::where('id',$uId)->get();
-				$user = User::all();
-				$chat = Supportchat::all();
+			$uId = $request->input('userId');
+			$chatWith = User::where('id',$uId)->get();
+			$user = User::all();
+			$chat = Supportchat::all();
 				return view('supportChat',compact('chatWith'))->with('user',$user)->with('chat',$chat);
+
 			}else{
 				return back();
 				exit();
 			}
-		}else{
-			return back();
-			exit();
-		}
 	}
 }

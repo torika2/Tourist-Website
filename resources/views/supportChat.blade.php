@@ -1,143 +1,108 @@
-<!DOCTYPE html>
-<html>
-<head>
-	<title>Support</title>
-    <meta name="csrf-token" content="{{ csrf_token() }}"> 
-    <meta charset="utf-8">
-     <script src = "https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
-</head>
-<body>
-		<style type="text/css">
-            .chatDiv{
-                width: 500px;
-                height: 500px;
-                border-radius: 2px;
-                background:grey;
-                margin:auto;
-            }
-            .chatOutput{
-                width: 76.4%;
-                height: 85%;
-                background:white;
-                border-radius: 1px;
-                margin-left: 2.5%;
-                margin-top: 5px;
-            }
-            .chatInput{
-                width: 95%;
-                margin:auto;
-                height: 50px;
-                background:darkgrey;
-                border-radius:2px;
-            }
-            .chatTextInput{
-                width: 79%;
-                margin-left: 4px;
-                height:35px;
-                margin-top: 5px
-            }
-            .chatTextInput:hover{
-                border:solid 1px orange;
+@extends('lay')
 
-            }
-            .sendButton{
-                color:white;
-                background: orange;
-                border:none;
-                border-radius: 2px;
-                width: 17.5%;
-                height: 39px;
-            }
-            .sendButton:hover{
-                opacity: 0.8;
-            }
-            .registerbtn {
-              background-color: darkred;
-              color: white;
-              height: 50px;
-              margin-left:31.4%;
-              border: none;
-              cursor: pointer;
-              width: 37.2%;
-              opacity: 0.9;
-              border-radius: 2px;
-            }
+@section('main')
 
-            .registerbtn:hover {
-              opacity: 1;
-            }
-            li{
-                list-style: none;
-                text-align: center;
-            }
-</style>
-        <div>
-            <a href="" style="text-decoration: underline gold;color:black;font-size:20px;">
-                <b><i>{{'Support '.\Auth::user()->name}}</i></b></a>
-        </div>
 @foreach ($chatWith as $chatWiths)
-	<div class="chatDiv">
+    <div class="chatDiv">
             <div style="height: 7px;"></div>
             <div class="chatOutput" >
             @foreach ($chat as $chats)
                 @if (\Auth::user()->id == $chats->userId && $chatWiths->id == $chats->oponentId)
-                    <div id="{{ $chats->id }}" style="border-radius: 5px;background:none;border:solid 0.5px white;">{{\Auth::user()->name.':'.$chats->content}}
-                    <button id="btn-submit" style="color:red;" onclick="deleteData({{$chats->id}})" >X</button>
+                    <div id="{{$chats->id}}" style="border:none;background:none;">{{\Auth::user()->name.':'.$chats->content}}
+                    <button id="btn-submit" class="deleteButton" onclick="deleteData({{$chats->id}})" >X</button>
+                    @if ($chats->seen == 1)
+                        <p id="outPutP" style="font-size: 10px;float: right;">Seen...</p>
+                    @endif  
                 </div>                         
                 @endif 
                 @if ($chats->userId == $chatWiths->id && \Auth::user()->id == $chats->oponentId)
-                    <div id="outPut" style="border-radius: 5px;background:blue;color:white;text-align: right;">{{$chatWiths->name.' : '.$chats->content}}</div>
+                    <div id="output" style="background:grey;color:white;text-align: right;">{{$chatWiths->name.' : '.$chats->content}}</div>
                 @endif
             @endforeach
             </div>
             <div style="float: right;margin-top: -85%;">
                 <ul>
                     @foreach ($user as $users)
-	                    @if (Auth::user()->id != $users->id)
-		                    <form action="{{ route('userChat') }}" method="POST">
-		                        @csrf
-		                        <input type="hidden" name="userId" value="{{$users->id}}">
-		                        <li><button style="border-radius: 2px;width: 95px;margin-right:6px;height: 30px;background: darkorange;color: white;">{{$users->name}}</button></li>
-		                    </form>
-	                    @endif
+                        @if (Auth::user()->id != $users->id)
+                            <form action="{{ route('userChat') }}" method="POST">
+                                @csrf
+                                <input type="hidden" name="userId" value="{{$users->id}}">
+                                <li><button class="chooseChatWith">{{$users->name}}
+                                    @if ( $chats->oponentId == \Auth::user()->id && $chats->seen == 0)
+                                       <b style="color:yellow;">|!|</b>
+                                    @endif
+                                </button></li>
+                            </form>
+                        @endif
                     @endforeach
                 </ul>
             </div>
             <div class="chatInput">
-                <form id="chatForm" action="{{route('supportisation')}}" method="POST">
-                        @csrf
-                    <input id="content" class="chatTextInput" type="text"placeholder="{{'Send Message To -'.$chatWiths->name}}" name="inputChatText" />
-                    <input type="hidden" name="oponentId" value="{{$chatWiths->id}}">
+                {{-- <form action="{{route('supp')}}" method="POST"> --}}
+                    {{-- @csrf  --}}
+                        @if ($chats->seen == 0 && $chats->oponentId == \Auth::user()->id)
+                            <input id="content" class="chatTextInput" type="text"placeholder="{{'Send Message To -'.$chatWiths->name}}" name="inputChatText" />
+                        @else
+                            <input id="anotherInp" class="chatTextInput" type="text"placeholder="{{'Send Message To -'.$chatWiths->name}}" name="inputChatText" />
+                        @endif
+                    <input id="oponentId" name="opId" type="hidden" value="{{$chatWiths->id}}" />
                     <button id="chatAccept" class="sendButton" name="chatSendButton"><b>Send</b></button>
-                    <input id="seen" name="seen" type="hidden" value="1"/>
-                </form>
+                {{-- </form> --}}
             </div>    
         </div>
         @endforeach
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
 <script type="text/javascript">
-function loadDoc() {
-    $.ajaxSetup({
-        headers: {
-            'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
-        }
-    });
-     var xhttp = new XMLHttpRequest();
-       $.ajax
-        ({
-            type: "POST",
-            dataType : 'json',
-            url: "{{ route('supportisation') }}", 
-            data: {_token:"{{csrf_token()}}"}
-        }).done(function(){
-                console.log('Ajax was Successful!');
-        }).fail(function(){
-            console.log('Ajax Failed')
+    // ========
+$(document).ready(function(){
+    $("#content").click(function(){
+            var oponentId = $('#oponentId').val();
+            $.ajaxSetup({
+                headers: {
+                    'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+                }
+            });
+            $.ajax({
+                type: "post", 
+                dataType : "json",
+                url: "{{ route('seenMsg') }}", 
+                data: {
+                    oponentId: $('').val()
+                },
+            }).done( function(){ 
+                console.log('Ajax Successful');
+            }).fail(function(){
+                console.log('Ajax Failed');
+            });
         });
-  // xhttp.open("POST", "", true);
-  // xhttp.send();
-}
+    });
 
-    function deleteData(id){
+    // ========
+$(document).ready(function(id){
+    $("#chatAccept").click(function(id){
+            var content = $('#anotherInp').val();
+            var myId = $('#myId').val();
+            var oponentId = $('#oponentId').val();
+        $.ajaxSetup({
+            headers: {
+                'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
+            }
+        });
+           $.ajax({
+                type: "POST",
+                dataType : 'json',
+                url: "{{ route('supp') }}", 
+                data: {'oponentId':oponentId,'inputChatText':content},
+            }).done(function(data){
+                    $("output"+data.userId);
+            }).fail(function(){
+                console.log('Ajax Failed')
+            });
+        });
+    });
+
+    // ========
+function deleteData(id){
         $.ajaxSetup({
             headers: {
                 'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content'),
@@ -145,7 +110,7 @@ function loadDoc() {
         });
         if (confirm("Are you sure ?")) {
             $.ajax({
-                type: "POST", 
+                type: "delete", 
                 dataType : 'json',
                 url: "{{ route('deleteComm') }}", 
                 data: {"msgId":id},
@@ -155,7 +120,8 @@ function loadDoc() {
                 console.log('Ajax Failed')
             });
         }
-    }
+}
+
 </script>
         {{-- LOGOUT :::::::::::::: --}}
         <div>
@@ -164,7 +130,5 @@ function loadDoc() {
                 <button class="registerbtn">Logout</button>
             </form>
         </div>
-<script type="text/javascript" src="{{ asset('js/ajax.min.js') }}"></script>
+@endsection
 
-</body>
-</html>

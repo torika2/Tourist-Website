@@ -9,14 +9,19 @@ use Input;
 
 class pageController extends Controller
 {
+    public function __construct(){
+
+        // $this->middleware('noSession');
+        
+    }
     public function emptyLogin()
     {
         return \Redirect::to('/Login');
     }
-	public function welcome()
-	{
-		return view('welcome');
-	}
+    public function welcome()
+    {
+        return view('welcome');
+    }
     public function welcomePage()
     {
         if (Auth::user()) {
@@ -29,7 +34,7 @@ class pageController extends Controller
     }
     public function loginPage(Request $request)
     {
-    	return view('Login');
+        return view('Login');
     }
     public function registration()
     {
@@ -38,20 +43,20 @@ class pageController extends Controller
     public function supportChat(Request $request)
     {
         if (Auth::user()) {
-        	$this->validate($request,[
-        		'inputChatText' => 'required',
-        		'userId'        => 'required',
-        	]);
-        	$chat = new Supportchat;
+            $this->validate($request,[
+                'inputChatText' => 'required',
+                'userId'        => 'required'
+            ]);
+            $chat = new Supportchat;
 
-        	$chat->content = $request->input('inputChatText');
-        	$chat->userId  = $request->input('userId');
+            $chat->content = $request->input('inputChatText');
+            $chat->userId  = $request->input('userId');
             if (!empty(request('seen'))) {
                 $chat->seen = $request->input('seen');
             }
-        	$chat->save();
+            $chat->save();
 
-        	return back();
+            return back();
         }else{
             return back();
         }
